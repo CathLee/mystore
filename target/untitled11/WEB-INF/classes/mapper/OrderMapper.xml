@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ly.dao.OrderDao">
+    <update id="faHuo" parameterType="com.ly.model.Order">
+        update orders set status = 1 where ordernum=#{ordernum}
+    </update>
+
+    <resultMap id="BaseMap" type="com.ly.model.Order">
+        <result column="ordernum" property="ordernum" jdbcType="VARCHAR"/>
+        <result column="quantity" property="quantity" jdbcType="INTEGER"/>
+        <result column="money" property="money" jdbcType="DOUBLE"/>
+        <result column="time" property="time" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="userId" property="userId" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="findOrders" resultMap="BaseMap">
+            select * from orders order by ordernum desc
+    </select>
+
+    <insert id="save" parameterType="com.ly.model.Order">
+        insert into orders (ordernum,quantity,money,time,status,userId)
+        values (#{o.ordernum},#{o.quantity},#{o.money},#{o.time},#{o.status},#{o.user.id})
+    </insert>
+
+    <select id="findOrdersByUser" parameterType="com.ly.model.Order">
+        select * from orders where userId = #{userId} order by ordernum desc
+    </select>
+</mapper>

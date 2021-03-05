@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ly.dao.ManagerDao">
+    <resultMap id="BaseResultMap" type="com.ly.model.Administrator">
+        <result column="admin_username" property="username" jdbcType="VARCHAR"/>
+        <result column="admin_password" property="password" jdbcType="VARCHAR"/>
+        <result column="admin_name" property="name" jdbcType="VARCHAR"/>
+        <result column="admin_sex" property="sex" jdbcType="VARCHAR"/>
+        <result column="admin_tel" property="tel" jdbcType="CHAR"/>
+    </resultMap>
+
+    <select id="login" resultMap="BaseResultMap"  >
+          select * from administrator where admin_username = #{username}
+    </select>
+
+    <update id="managerInformation" parameterType="com.ly.model.Administrator">
+        update administrator
+        set admin_name=#{name},admin_sex=#{sex},admin_tel=#{tel}
+        where admin_username = #{username}
+    </update>
+
+    <update id="managerPassword" parameterType="com.ly.model.Administrator">
+        update administrator set admin_password = #{password} where admin_username = #{username}
+    </update>
+
+    <insert id="addAdmin" parameterType="com.ly.model.Administrator">
+        insert into administrator(admin_username,admin_name,admin_password,admin_tel,admin_sex)
+        values (#{username},#{name},#{password},#{tel},#{sex})
+    </insert>
+
+    <resultMap id="BookResultMap" type="com.ly.model.Book">
+        <result column="book_id" property="book_id" jdbcType="VARCHAR"/>
+        <result column="book_name" property="book_name" jdbcType="VARCHAR"/>
+        <result column="book_author" property="book_author" jdbcType="VARCHAR"/>
+        <result column="book_press" property="book_press" jdbcType="VARCHAR"/>
+<!--        <result column="book_category" property="category." jdbcType="VARCHAR"/>-->
+        <result column="filename" property="filename" jdbcType="VARCHAR"/>
+        <result column="path" property="path" jdbcType="CHAR"/>
+        <result column="book_desc" property="book_desc" jdbcType="VARCHAR"/>
+        <result column="book_price" property="book_price" jdbcType="DOUBLE"/>
+        <result column="book_kunumber" property="book_kunumber" jdbcType="INTEGER"/>
+        <result column="book_xiaonumber" property="book_xiaonumber" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="wxys" resultMap="BookResultMap">
+        select * from bookdb where book_category = (select category_id from category where category_name = "文学艺术")
+    </select>
+
+    <select id="rwsk" resultMap="BookResultMap">
+        select * from bookdb where book_category = (select category_id from category where category_name = "人文社科")
+    </select>
+
+    <select id="sets" resultMap="BookResultMap">
+        select * from bookdb where book_category = (select category_id from category where category_name = "少儿童书")
+    </select>
+
+    <select id="jyks" resultMap="BookResultMap">
+        select * from bookdb where book_category = (select category_id from category where category_name = "教育考试")
+    </select>
+
+    <select id="jjjr" resultMap="BookResultMap">
+        select * from bookdb where book_category = (select category_id from category where category_name = "经济金融")
+    </select>
+
+    <select id="kxjs" resultMap="BookResultMap">
+        select * from bookdb where book_category = (select category_id from category where category_name = "科学技术")
+    </select>
+
+    <delete id="delBook" parameterType="com.ly.model.Book">
+        delete from bookdb where book_id=#{book_id}
+    </delete>
+
+    <update id="editBook" parameterType="com.ly.model.Book">
+        update bookdb
+        set  book_name=#{book_name},book_author=#{book_author},book_press=#{book_press},book_desc=#{book_desc},book_price=#{book_price},book_kunumber=#{book_kunumber}
+        where book_id = #{book_id} ;
+    </update>
+
+    <select id="findBookById" resultMap="BookResultMap"  >
+          select * from bookdb where book_id = #{book_id}
+    </select>
+
+
+
+    <resultMap id="CategoryResultMap" type="com.ly.model.Category">
+        <result column="category_id" property="category_id" jdbcType="VARCHAR"/>
+        <result column="category_name" property="category_name" jdbcType="VARCHAR"/>
+        <result column="category_desc" property="category_desc" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="findAllCategory" resultMap="CategoryResultMap">
+            select * from category
+    </select>
+
+
+    <select id="findCategoryById" resultMap="CategoryResultMap">
+            select * from category where category_id = #{categoryid}
+    </select>
+
+    <insert id="addBook" parameterType="com.ly.model.Book">
+        insert into bookdb (book_category,book_id,book_name,book_author,book_press,filename,path,book_desc,book_price,book_kunumber,book_xiaonumber)
+        values (#{category.category_id},#{book_id},#{book_name},#{book_author},#{book_press},#{filename},#{path},#{book_desc},#{book_price},#{book_kunumber},#{book_xiaonumber})
+    </insert>
+
+    <delete id="delCategory" parameterType="com.ly.model.Category">
+        delete from category where category_id=#{category_id}
+    </delete>
+
+    <update id="editCategory" parameterType="com.ly.model.Category">
+        update category set category_name=#{category_name},category_desc=#{category_desc} where category_id=#{category_id}
+    </update>
+
+    <insert id="addCategory" parameterType="com.ly.model.Category">
+        insert into category (category_id,category_name,category_desc)
+        values (#{category_id},#{category_name},#{category_desc})
+    </insert>
+
+
+    <resultMap id="UserResultMap" type="com.ly.model.User">
+        <result column="user_username" property="username" jdbcType="VARCHAR"/>
+        <result column="user_id" property="id" jdbcType="VARCHAR"/>
+        <result column="user_password" property="password" jdbcType="VARCHAR"/>
+        <result column="user_name" property="name" jdbcType="VARCHAR"/>
+        <result column="user_sex" property="sex" jdbcType="VARCHAR"/>
+        <result column="user_tel" property="tel" jdbcType="CHAR"/>
+        <result column="user_address" property="address" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="findUsers" resultMap="UserResultMap" >
+        select * from user_message
+    </select>
+
+    <select id="sales" resultMap="BookResultMap">
+        select * from bookdb where book_xiaonumber>0 order by book_xiaonumber desc
+    </select>
+</mapper>
